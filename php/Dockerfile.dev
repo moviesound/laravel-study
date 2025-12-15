@@ -1,0 +1,32 @@
+FROM php:8.3-fpm
+
+WORKDIR /var/www
+
+# System deps
+RUN apt-get update && apt-get install -y \
+    git unzip curl \
+    libzip-dev libpng-dev libonig-dev libicu-dev libxml2-dev \
+    libcurl4-openssl-dev libssl-dev \
+    pkg-config bison re2c \
+    nodejs npm \
+    && docker-php-ext-install \
+        pdo pdo_mysql mbstring xml intl bcmath gd zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# УДАЛЯЕМ дефолтный www.conf (он слушает 9000)
+RUN rm -f /usr/local/etc/php-fpm.d/www.conf
+
+# Создаём папку под unix-сокет
+RUN mkdir -p /sock && chown -R www-data:www-data /sock
+
+# Кладём СВОЙ конфиг php-fpm
+COPY ./php/docker-www.conf /usr/local/etc/php-fpm.d/www.conf
+
+# Запускаем сокет
+CMD ["php-fpm", "-F", "-y", "/usr/local/etc/php-fpm.d/www.conf"]
