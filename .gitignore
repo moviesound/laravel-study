@@ -32,3 +32,4 @@ Homestead.yaml
 /laravel_test/Homestead.json
 /laravel_test/Homestead.yaml
 Thumbs.db
+.gitignore
