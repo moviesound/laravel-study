@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     libzip-dev libpng-dev libonig-dev libicu-dev libxml2-dev \
     libcurl4-openssl-dev libssl-dev \
     pkg-config bison re2c \
-    nodejs npm \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
     && docker-php-ext-install \
         pdo pdo_mysql mbstring xml intl bcmath gd zip \
     && pecl install redis \
