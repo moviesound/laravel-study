@@ -25,6 +25,9 @@ return new class extends Migration
 
             // защита от дублей связей
             $table->unique(['task_template_id', 'tag_id']);
+
+            $table->foreign('task_template_id')->references('id')->on('task_templates')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('tag_id')->references('id')->on('tags')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 

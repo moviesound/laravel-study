@@ -30,7 +30,13 @@ return new class extends Migration
                 ->references('id')
                 ->on('event_templates')
                 ->cascadeOnUpdate()
-                ->noActionOnDelete();//special script scenario is needed on deleting
+                ->cascadeOnDelete();//special script scenario is needed on deleting
+
+            $table->foreign('tag_id')
+                ->references('id')
+                ->on('tags')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
         });
     }
 
